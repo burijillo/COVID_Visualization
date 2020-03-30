@@ -1,0 +1,10 @@
+D:\COVID_Visualization.git\COVID_Visualization\COVID_Visualization\bin\Debug\COVID_Visualization.exe.config
+D:\COVID_Visualization.git\COVID_Visualization\COVID_Visualization\bin\Debug\COVID_Visualization.exe
+D:\COVID_Visualization.git\COVID_Visualization\COVID_Visualization\bin\Debug\COVID_Visualization.pdb
+D:\COVID_Visualization.git\COVID_Visualization\COVID_Visualization\obj\Debug\COVID_Visualization.csprojAssemblyReference.cache
+D:\COVID_Visualization.git\COVID_Visualization\COVID_Visualization\obj\Debug\COVID_Visualization.MainScreen.resources
+D:\COVID_Visualization.git\COVID_Visualization\COVID_Visualization\obj\Debug\COVID_Visualization.Properties.Resources.resources
+D:\COVID_Visualization.git\COVID_Visualization\COVID_Visualization\obj\Debug\COVID_Visualization.csproj.GenerateResource.cache
+D:\COVID_Visualization.git\COVID_Visualization\COVID_Visualization\obj\Debug\COVID_Visualization.exe
+D:\COVID_Visualization.git\COVID_Visualization\COVID_Visualization\obj\Debug\COVID_Visualization.pdb
+D:\COVID_Visualization.git\COVID_Visualization\COVID_Visualization\obj\Debug\COVID_Visualization.Forms.WaitForm.resources
