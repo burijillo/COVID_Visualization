@@ -8,3 +8,8 @@ D:\COVID_Visualization.git\COVID_Visualization\COVID_Visualization\obj\Debug\COV
 D:\COVID_Visualization.git\COVID_Visualization\COVID_Visualization\obj\Debug\COVID_Visualization.exe
 D:\COVID_Visualization.git\COVID_Visualization\COVID_Visualization\obj\Debug\COVID_Visualization.pdb
 D:\COVID_Visualization.git\COVID_Visualization\COVID_Visualization\obj\Debug\COVID_Visualization.Forms.WaitForm.resources
+D:\COVID_Visualization.git\COVID_Visualization\COVID_Visualization\bin\Debug\OxyPlot.dll
+D:\COVID_Visualization.git\COVID_Visualization\COVID_Visualization\bin\Debug\OxyPlot.WindowsForms.dll
+D:\COVID_Visualization.git\COVID_Visualization\COVID_Visualization\bin\Debug\OxyPlot.xml
+D:\COVID_Visualization.git\COVID_Visualization\COVID_Visualization\bin\Debug\OxyPlot.WindowsForms.xml
+D:\COVID_Visualization.git\COVID_Visualization\COVID_Visualization\obj\Debug\COVID_Visualization.csproj.CopyComplete
