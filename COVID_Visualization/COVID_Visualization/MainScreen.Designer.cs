@@ -31,15 +31,18 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainScreen));
             this.mainTabControl = new System.Windows.Forms.TabControl();
             this.configTabPage = new System.Windows.Forms.TabPage();
-            this.plotsTabPage = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.getDataFromWebButton = new System.Windows.Forms.Button();
             this.mainDataPanel = new System.Windows.Forms.Panel();
+            this.plotsTabPage = new System.Windows.Forms.TabPage();
+            this.mainDataGridView = new System.Windows.Forms.DataGridView();
             this.mainTabControl.SuspendLayout();
             this.configTabPage.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
+            this.mainDataPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mainDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // mainTabControl
@@ -63,16 +66,6 @@
             this.configTabPage.TabIndex = 0;
             this.configTabPage.Text = "Data";
             this.configTabPage.UseVisualStyleBackColor = true;
-            // 
-            // plotsTabPage
-            // 
-            this.plotsTabPage.Location = new System.Drawing.Point(4, 22);
-            this.plotsTabPage.Name = "plotsTabPage";
-            this.plotsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.plotsTabPage.Size = new System.Drawing.Size(792, 424);
-            this.plotsTabPage.TabIndex = 1;
-            this.plotsTabPage.Text = "Plots";
-            this.plotsTabPage.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel1
             // 
@@ -120,12 +113,32 @@
             // 
             // mainDataPanel
             // 
+            this.mainDataPanel.Controls.Add(this.mainDataGridView);
             this.mainDataPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainDataPanel.Location = new System.Drawing.Point(0, 28);
             this.mainDataPanel.Margin = new System.Windows.Forms.Padding(0);
             this.mainDataPanel.Name = "mainDataPanel";
             this.mainDataPanel.Size = new System.Drawing.Size(786, 390);
             this.mainDataPanel.TabIndex = 1;
+            // 
+            // plotsTabPage
+            // 
+            this.plotsTabPage.Location = new System.Drawing.Point(4, 22);
+            this.plotsTabPage.Name = "plotsTabPage";
+            this.plotsTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.plotsTabPage.Size = new System.Drawing.Size(792, 424);
+            this.plotsTabPage.TabIndex = 1;
+            this.plotsTabPage.Text = "Plots";
+            this.plotsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // mainDataGridView
+            // 
+            this.mainDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.mainDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainDataGridView.Location = new System.Drawing.Point(0, 0);
+            this.mainDataGridView.Name = "mainDataGridView";
+            this.mainDataGridView.Size = new System.Drawing.Size(786, 390);
+            this.mainDataGridView.TabIndex = 0;
             // 
             // MainScreen
             // 
@@ -139,6 +152,8 @@
             this.configTabPage.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
+            this.mainDataPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.mainDataGridView)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -152,6 +167,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Button getDataFromWebButton;
         private System.Windows.Forms.Panel mainDataPanel;
+        private System.Windows.Forms.DataGridView mainDataGridView;
     }
 }
 

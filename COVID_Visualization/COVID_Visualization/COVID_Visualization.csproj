@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataParser.cs" />
+    <Compile Include="Data\DataElement.cs" />
     <Compile Include="Forms\WaitForm.cs">
       <SubType>Form</SubType>
     </Compile>

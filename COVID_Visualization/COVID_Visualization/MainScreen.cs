@@ -10,12 +10,14 @@ using System.Windows.Forms;
 using System.Diagnostics;
 
 using COVID_Visualization.Forms;
+using COVID_Visualization.Data;
 
 namespace COVID_Visualization
 {
     public partial class MainScreen : Form
     {
         private bool isDataParsed = false;
+        Dictionary<string, DataNational> globalData_dict = new Dictionary<string, DataNational>();
 
         public event EventHandler _data_parsed_event;
 
@@ -52,16 +54,48 @@ namespace COVID_Visualization
         {
             waitForm = new WaitForm("HOSTIA PILOTES");
             waitForm.Show();
+
+            getData_bg.RunWorkerAsync();
         }
 
         private void GetData_bg_DoWork(object sender, DoWorkEventArgs e)
         {
-            throw new NotImplementedException();
+            DataParser dataParser = new DataParser();
+
+            dataParser.CSVParser(@"D:\COVID-19\csse_covid_19_data\csse_covid_19_time_series\time_series_covid19_confirmed_global.csv", out globalData_dict);
+            _data_parsed_event?.Invoke(sender, e);
         }
 
         private void GetData_bg_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            throw new NotImplementedException();
+            waitForm.Close();
+        }
+
+        private void FillDataSet()
+        {
+            // Fill dataset with parsed data
+            if (isDataParsed)
+            {
+                // Initialize mainDataGridView
+                mainDataGridView.Invoke((Action)delegate
+                {
+                    mainDataGridView.ColumnCount = 2;
+                    mainDataGridView.Columns[0].Name = "Country";
+                    mainDataGridView.Columns[1].Name = "Confirmed cases";
+                });
+
+                foreach(var item in globalData_dict)
+                {
+                    string country = item.Key;
+                    int confirmed = item.Value.NATIONAL_DATA.DATA.Values.ToArray()[item.Value.NATIONAL_DATA.DATA.Count - 1];
+                    string[] row = new string[] { country, confirmed.ToString() };
+
+                    mainDataGridView.Invoke((Action)delegate
+                    {
+                        mainDataGridView.Rows.Add(row);
+                    });
+                }
+            }
         }
 
         #endregion
@@ -70,7 +104,24 @@ namespace COVID_Visualization
         {
             isDataParsed = true;
 
-            mainDataPanel.Enabled = true;
+            mainDataPanel.Invoke((Action)delegate
+            {
+                mainDataPanel.Enabled = true;
+            });
+
+            mainDataGridView.Invoke((Action)delegate
+            {
+                mainDataGridView.Rows.Clear();
+                mainDataGridView.Refresh();
+            });
+
+            FillDataSet();
+
+            // Disable get data button
+            getDataFromWebButton.Invoke((Action)delegate
+            {
+                getDataFromWebButton.Enabled = false;
+            });
         }
     }
 }
