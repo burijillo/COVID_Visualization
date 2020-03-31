@@ -30,6 +30,7 @@ namespace COVID_Visualization
         public event EventHandler _data_parsed_event;
 
         WaitForm waitForm;
+        DataPlot dataPlot;
         BackgroundWorker getData_bg;
         PlotView mainPlotView;
         PlotModel MainPlotModel;
@@ -44,6 +45,8 @@ namespace COVID_Visualization
             InitializePlotView();
 
             _data_parsed_event += _data_parsed_triggered;
+
+            dataPlot = new DataPlot();
 
             getData_bg = new BackgroundWorker();
             getData_bg.DoWork += GetData_bg_DoWork;
@@ -169,18 +172,39 @@ namespace COVID_Visualization
 
         private void refreshPlotButton_Click(object sender, EventArgs e)
         {
-            if(isDataParsed)
+            try
             {
-                // Clear plot
-                clearPlot();
-
-                List<string> SeriesNames = new List<string>();
-                List<List<PointF>> globalList = GetListOfPointsToPlot((PlotTypes)Enum.Parse(typeof(PlotTypes), plotTypeComboBox.SelectedItem.ToString()), out SeriesNames);
-
-                for (int i = 0; i < globalList.Count; i++)
+                if (isDataParsed)
                 {
-                    PlotDataIntoView(globalList[i], ColorTypes()[i], SeriesNames[i]);
+                    // Clear plot
+                    clearPlot();
+
+                    List<string> SeriesNames = new List<string>();
+                    List<List<PointF>> globalList = GetPlotType((PlotTypes)Enum.Parse(typeof(PlotTypes), plotTypeComboBox.SelectedItem.ToString()), out SeriesNames);
+
+                    for (int i = 0; i < globalList.Count; i++)
+                    {
+                        PlotDataIntoView(globalList[i], ColorTypes()[i], SeriesNames[i]);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error while plotting. " + ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void logScaleCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (logScaleCheckBox.Checked)
+            {
+                MainPlotModel.Axes[1].Reset();
+                MainPlotModel.Axes[1] = new LogarithmicAxis { Position = AxisPosition.Left, MaximumPadding = 0.1, MinimumPadding = 0.1, MajorGridlineStyle = LineStyle.Solid };
+            }
+            else
+            {
+                MainPlotModel.Axes[1].Reset();
+                MainPlotModel.Axes[1] = new LinearAxis { Position = AxisPosition.Left, MaximumPadding = 0.1, MinimumPadding = 0.1, MajorGridlineStyle = LineStyle.Solid };
             }
         }
 
@@ -233,7 +257,6 @@ namespace COVID_Visualization
         }
 
         #region Plot types
-
         private enum PlotTypes : int
         {
             Confirmed_deaths_recovered = 0,
@@ -245,51 +268,19 @@ namespace COVID_Visualization
             return new Color[] { Color.Black, Color.DarkBlue, Color.DarkRed, Color.DarkGoldenrod };
         }
 
-        private List<List<PointF>> GetListOfPointsToPlot(PlotTypes plotType, out List<string> seriesNames)
+        private List<List<PointF>> GetPlotType(PlotTypes plotTypes, out List<string> series_name)
         {
             List<List<PointF>> result = new List<List<PointF>>();
-            seriesNames = new List<string>();
-
-            switch (plotType)
+            series_name = new List<string>();
+            switch (plotTypes)
             {
                 case PlotTypes.Confirmed_deaths_recovered:
-                    // Get confirmed cases
-                    seriesNames.Add("Confirmed");
-                    List<PointF> confirmed_pointList = new List<PointF>();
-                    float counter = 0;
-                    foreach (var item in globalDataConfirmed_dict[countryComboBox.Text].NATIONAL_DATA.DATA)
-                    {
-                        float value = (float)item.Value;
-                        confirmed_pointList.Add(new PointF(counter, value));
-                        counter++;
-                    }
-                    result.Add(confirmed_pointList);
-                    counter = 0;
-
-                    // Get death cases
-                    seriesNames.Add("Deaths");
-                    List<PointF> deaths_pointList = new List<PointF>();
-                    foreach (var item in globalDataDeaths_dict[countryComboBox.Text].NATIONAL_DATA.DATA)
-                    {
-                        float value = (float)item.Value;
-                        deaths_pointList.Add(new PointF(counter, value));
-                        counter++;
-                    }
-                    result.Add(deaths_pointList);
-                    counter = 0;
-
-                    // Get recovered cases
-                    seriesNames.Add("Recovered");
-                    List<PointF> recovered_pointList = new List<PointF>();
-                    foreach (var item in globalDataRecovered_dict[countryComboBox.Text].NATIONAL_DATA.DATA)
-                    {
-                        float value = (float)item.Value;
-                        recovered_pointList.Add(new PointF(counter, value));
-                        counter++;
-                    }
-                    result.Add(recovered_pointList);
+                    result = dataPlot.GetListOfPointsToPlot(globalDataConfirmed_dict, globalDataDeaths_dict, globalDataRecovered_dict, countryComboBox.Text, out series_name);
 
                     break;
+
+                default:
+                    throw new Exception("Plot type selection error");
             }
 
             return result;

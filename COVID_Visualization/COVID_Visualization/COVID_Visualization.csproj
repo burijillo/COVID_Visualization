@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Data\DataParser.cs" />
     <Compile Include="Data\DataElement.cs" />
+    <Compile Include="Data\DataPlot.cs" />
     <Compile Include="Forms\WaitForm.cs">
       <SubType>Form</SubType>
     </Compile>
