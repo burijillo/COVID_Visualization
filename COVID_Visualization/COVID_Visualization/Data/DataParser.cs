@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Diagnostics;
 using System.Globalization;
+using System.Windows.Forms;
 
 using COVID_Visualization.Data;
 
@@ -13,13 +14,13 @@ namespace COVID_Visualization
 {
     class DataParser
     {
-        public bool CSVParser(string filepath, out Dictionary<string, DataNational> globalData_dict)
+        public bool CSVParser(string filepath, out Dictionary<string, DataNational> globalData_dict, out List<string> timestamp_list)
         {
             bool result = true;
             globalData_dict = new Dictionary<string, DataNational>();
 
             StreamReader csv_reader = new StreamReader(File.OpenRead(filepath));
-            List<string> timestamp_list = new List<string>();
+            timestamp_list = new List<string>();
 
             while (!csv_reader.EndOfStream)
             {
@@ -82,6 +83,65 @@ namespace COVID_Visualization
             }
 
             Debug.WriteLine(globalData_dict.Count);
+
+            return result;
+        }
+
+        public bool CSVDailyParser(string filepath, out Dictionary<string, DataLocal> localDataDaily_dict)
+        {
+            bool result = true;
+            localDataDaily_dict = new Dictionary<string, DataLocal>();
+
+            StreamReader csv_reader = new StreamReader(File.OpenRead(filepath));
+
+            int line_counter = 0;
+            while (!csv_reader.EndOfStream)
+            {
+                string line = csv_reader.ReadLine();
+                if (!string.IsNullOrWhiteSpace(line))
+                {
+                    if (line.Contains('"'))
+                    {
+                        line = line.Replace(", ", "; ");
+                        line = line.Replace("\"", "");
+                    }
+                    string[] values = line.Split(',');
+
+                    if (line_counter != 0)
+                    {
+                        string prov_country_key = values[3] + "_" + values[2] + "_" + values[1];
+                        // Check if province/country key is already added. This should not happen in this database
+                        if (localDataDaily_dict.ContainsKey(prov_country_key))
+                        {
+                            MessageBox.Show(prov_country_key + " already added", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else
+                        {
+                            // Get coordinates
+                            if (!string.IsNullOrEmpty(values[5]) && !string.IsNullOrEmpty(values[6]))
+                            {
+                                double[] coordinates = new double[] { Convert.ToDouble(values[5], CultureInfo.InvariantCulture), Convert.ToDouble(values[6], CultureInfo.InvariantCulture) };
+                                // Get confirmed data
+                                int daily_confirmed = Convert.ToInt32(values[7]);
+                                // Get deaths data
+                                int daily_deaths = Convert.ToInt32(values[8]);
+                                // Get recovered data
+                                int daily_recovered = Convert.ToInt32(values[9]);
+
+                                DataElement dataElement = new DataElement(coordinates, daily_confirmed, daily_deaths, daily_recovered);
+                                DataLocal dataLocal = new DataLocal(prov_country_key, dataElement);
+
+                                // Add to global dictionary
+                                localDataDaily_dict.Add(prov_country_key, dataLocal);
+                            }
+                        }
+                    }
+
+                    line_counter++;
+                }
+            }
+
+            Debug.WriteLine(localDataDaily_dict.Count);
 
             return result;
         }

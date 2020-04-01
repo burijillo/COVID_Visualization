@@ -1,2 +1,4 @@
 *.~lock.time_series_covid19_confirmed_global_EJEMPLO.csv\#
 /time_series_covid19_confirmed_global_EJEMPLO.csv
+
+*.suo
