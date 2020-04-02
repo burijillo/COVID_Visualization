@@ -442,7 +442,9 @@ namespace COVID_Visualization
         private enum PlotTypes : int
         {
             Confirmed_deaths_recovered = 0,
-            Daily_confirmed = 1
+            Daily_confirmed = 1,
+            Daily_deaths = 2,
+            Letality = 3
         }
 
         private Color[] ColorTypes()
@@ -463,6 +465,16 @@ namespace COVID_Visualization
 
                 case PlotTypes.Daily_confirmed:
                     result = dataPlot.GetListOfPoints_dailyConfirmed(globalDataConfirmed_dict, countryComboBox.Text, out series_name);
+
+                    break;
+
+                case PlotTypes.Daily_deaths:
+                    result = dataPlot.GetListOfPoints_dailyDeaths(globalDataDeaths_dict, countryComboBox.Text, out series_name);
+
+                    break;
+
+                case PlotTypes.Letality:
+                    result = dataPlot.GetListOfPoints_dailyLetality(globalDataConfirmed_dict, globalDataDeaths_dict, countryComboBox.Text, out series_name);
 
                     break;
 

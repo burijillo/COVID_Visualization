@@ -163,5 +163,67 @@ namespace COVID_Visualization.Data
 
             return result;
         }
+
+        // Get daily deaths
+        public List<List<PointF>> GetListOfPoints_dailyDeaths(Dictionary<string, DataNational> globalDataDeaths_dict, string country, out List<string> seriesNames)
+        {
+            List<List<PointF>> result = new List<List<PointF>>();
+            seriesNames = new List<string>();
+
+            // Get confirmed cases
+            seriesNames.Add("Deaths daily");
+            List<PointF> dailyDeaths_pointList = new List<PointF>();
+            float counter = 0;
+
+            List<string> keyList = globalDataDeaths_dict[country].NATIONAL_DATA.DATA.Keys.ToList();
+            for (int i = 1; i < globalDataDeaths_dict[country].NATIONAL_DATA.DATA.Count; i++)
+            {
+                float postVal = globalDataDeaths_dict[country].NATIONAL_DATA.DATA[keyList[i]];
+                float preVal = globalDataDeaths_dict[country].NATIONAL_DATA.DATA[keyList[i - 1]];
+
+                float value = postVal - preVal;
+                dailyDeaths_pointList.Add(new PointF(counter, value));
+                counter++;
+            }
+
+            result.Add(dailyDeaths_pointList);
+
+            return result;
+        }
+
+        // Get daily letality
+        public List<List<PointF>> GetListOfPoints_dailyLetality(Dictionary<string, DataNational> globalDataConfirmed_dict, Dictionary<string, DataNational> globalDataDeaths_dict, string country, out List<string> seriesNames)
+        {
+            List<List<PointF>> result = new List<List<PointF>>();
+            seriesNames = new List<string>();
+
+            // Get confirmed cases
+            seriesNames.Add(@"Letality daily (%)");
+            List<PointF> dailyLetality_pointList = new List<PointF>();
+            float counter = 0;
+
+            List<string> keyList = globalDataDeaths_dict[country].NATIONAL_DATA.DATA.Keys.ToList();
+            for (int i = 1; i < globalDataDeaths_dict[country].NATIONAL_DATA.DATA.Count; i++)
+            {
+                float postVal_confirmed = globalDataConfirmed_dict[country].NATIONAL_DATA.DATA[keyList[i]];
+                float preVal_confirmed = globalDataConfirmed_dict[country].NATIONAL_DATA.DATA[keyList[i - 1]];
+                float postVal_deaths = globalDataDeaths_dict[country].NATIONAL_DATA.DATA[keyList[i]];
+                float preVal_deaths = globalDataDeaths_dict[country].NATIONAL_DATA.DATA[keyList[i - 1]];
+
+                float value_deaths = postVal_deaths - preVal_deaths;
+                float value_confirmed = postVal_confirmed - preVal_confirmed;
+
+                float value = 0;
+                if (value_confirmed > 0)
+                    value = value_deaths / value_confirmed * 100;
+
+                dailyLetality_pointList.Add(new PointF(counter, value));
+                counter++;
+            }
+
+            result.Add(dailyLetality_pointList);
+
+            return result;
+        }
     }
 }
