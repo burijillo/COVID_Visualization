@@ -58,6 +58,7 @@
             this.recoveredMapRadioButton = new System.Windows.Forms.RadioButton();
             this.deathsMapRadioButton = new System.Windows.Forms.RadioButton();
             this.confirmedMapRadioButton = new System.Windows.Forms.RadioButton();
+            this.mainBarPlotView = new OxyPlot.WindowsForms.PlotView();
             this.mainTabControl.SuspendLayout();
             this.configTabPage.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -161,6 +162,7 @@
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 270F));
             this.tableLayoutPanel7.Controls.Add(this.mainDataGridView, 0, 0);
             this.tableLayoutPanel7.Controls.Add(this.mainGraphicPlotView, 1, 0);
+            this.tableLayoutPanel7.Controls.Add(this.mainBarPlotView, 2, 0);
             this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel7.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
@@ -460,6 +462,19 @@
             this.confirmedMapRadioButton.Text = "Confirmed";
             this.confirmedMapRadioButton.UseVisualStyleBackColor = true;
             // 
+            // mainBarPlotView
+            // 
+            this.mainBarPlotView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainBarPlotView.Location = new System.Drawing.Point(982, 3);
+            this.mainBarPlotView.Name = "mainBarPlotView";
+            this.mainBarPlotView.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.mainBarPlotView.Size = new System.Drawing.Size(264, 547);
+            this.mainBarPlotView.TabIndex = 2;
+            this.mainBarPlotView.Text = "plotView1";
+            this.mainBarPlotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.mainBarPlotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.mainBarPlotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            // 
             // MainScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -523,6 +538,7 @@
         private System.Windows.Forms.RadioButton recoveredMapRadioButton;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
         private OxyPlot.WindowsForms.PlotView mainGraphicPlotView;
+        private OxyPlot.WindowsForms.PlotView mainBarPlotView;
     }
 }
 

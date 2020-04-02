@@ -42,6 +42,7 @@ namespace COVID_Visualization
         PlotView mainPlotView;
         PlotModel MainPlotModel;
         PlotModel mainGraphicPlotModel;
+        PlotModel mainBarPlotModel;
 
         #region Initialization
 
@@ -75,6 +76,7 @@ namespace COVID_Visualization
             MainPlotModel = new PlotModel();
             mainPlotView = new PlotView();
             mainGraphicPlotModel = new PlotModel();
+            mainBarPlotModel = new PlotModel();
 
             MainPlotModel.PlotType = PlotType.XY;
             mainPlotView.Model = MainPlotModel;
@@ -88,6 +90,12 @@ namespace COVID_Visualization
             mainGraphicPlotModel.LegendPosition = LegendPosition.LeftTop;
             mainGraphicPlotModel.Axes.Add(new DateTimeAxis { Position = AxisPosition.Bottom, StringFormat = "d/M" });
             mainGraphicPlotModel.Axes.Add(new LinearAxis { Position = AxisPosition.Left, MaximumPadding = 0.1, MinimumPadding = 0.1, MajorGridlineStyle = LineStyle.Solid });
+
+            mainBarPlotModel.PlotType = PlotType.XY;
+            mainBarPlotView.Model = mainBarPlotModel;
+            mainBarPlotModel.LegendPosition = LegendPosition.BottomLeft;
+            //mainBarPlotModel.Axes.Add(new DateTimeAxis { Position = AxisPosition.Bottom, StringFormat = "d/M" });
+            //mainBarPlotModel.Axes.Add(new LinearAxis { Position = AxisPosition.Left, MaximumPadding = 0.1, MinimumPadding = 0.1, MajorGridlineStyle = LineStyle.Solid });
 
             mainPlotView.Dock = DockStyle.Fill;
             tableLayoutPanel3.Controls.Add(mainPlotView, 0, 0);
@@ -215,6 +223,46 @@ namespace COVID_Visualization
                 DateTime lastEntry = DateTime.ParseExact(timestamp_string_list[timestamp_string_list.Count - 1], "M/d/yy", CultureInfo.InvariantCulture);
                 MainPlotModel.Axes[0].Maximum = DateTimeAxis.ToDouble(lastEntry);
             }
+        }
+
+        private void GetMainGlobalBarPlot()
+        {
+            if (isDataParsed)
+            {
+                var sorted_data = GetGlobalDataConfirmedSorted();
+                int _bar_char_limit = 25;
+                BarSeries serie = new BarSeries();
+                var categoryAxis = new CategoryAxis { Position = AxisPosition.Left };
+
+                for (int i = 0; i < _bar_char_limit; i++)
+                {
+                    serie.Items.Add(new BarItem { Value = sorted_data[i].Item2 });
+                    categoryAxis.Labels.Add(sorted_data[i].Item1);
+                }
+                mainBarPlotModel.Axes.Add(categoryAxis);
+                mainBarPlotModel.Series.Add(serie);
+                mainBarPlotView.Invoke((Action)delegate
+                {
+                    mainBarPlotView.InvalidatePlot(true);
+                });
+            }
+        }
+
+        private List<Tuple<string, int>> GetGlobalDataConfirmedSorted()
+        {
+            List<Tuple<string, int>> result = new List<Tuple<string, int>>();
+
+            foreach(var item in globalDataConfirmed_dict)
+            {
+                string country = item.Key;
+                int last_value = item.Value.NATIONAL_DATA.DATA[item.Value.NATIONAL_DATA.DATA.Keys.ToList()[item.Value.NATIONAL_DATA.DATA.Count - 1]];
+
+                result.Add(new Tuple<string, int>(country, last_value));
+            }
+
+            result.Sort((a, b) => b.Item2.CompareTo(a.Item2));
+
+            return result;
         }
 
         #endregion
@@ -387,6 +435,7 @@ namespace COVID_Visualization
             ConvertTimeStringToDT();
 
             GetMainGlobalPlot();
+            GetMainGlobalBarPlot();
         }
 
         #region Plot types
