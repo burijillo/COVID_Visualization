@@ -145,5 +145,86 @@ namespace COVID_Visualization
 
             return result;
         }
+
+        public bool CSVSpainDataParser(string filepath, out Dictionary<string, DataNational> spainData_confirmedDict, out Dictionary<string, DataNational> spainData_deathsDict, out Dictionary<string, DataNational> spainData_recoveredDict, out List<string> timestamp_list, out List<string> region_list)
+        {
+            bool result = true;
+            spainData_confirmedDict = new Dictionary<string, DataNational>();
+            spainData_deathsDict = new Dictionary<string, DataNational>();
+            spainData_recoveredDict = new Dictionary<string, DataNational>();
+
+            StreamReader csv_reader = new StreamReader(File.OpenRead(filepath));
+            timestamp_list = new List<string>();
+            region_list = new List<string>();
+
+            while (!csv_reader.EndOfStream)
+            {
+                string line = csv_reader.ReadLine();
+                if (!string.IsNullOrWhiteSpace(line))
+                {
+                    if (line.Contains('"'))
+                    {
+                        line = line.Replace(", ", "; ");
+                        line = line.Replace("\"", "");
+                    }
+                    string[] values = line.Split(',');
+
+                    // Check for null values and set them to 0
+                    for (int i = 0; i < values.Length; i++)
+                    {
+                        if (string.IsNullOrEmpty(values[i]))
+                            values[i] = "0";
+                    }
+
+                    // If first columns is not two letters is not valid (ISO code for each region)
+                    if (values[0].Length == 2)
+                    {
+                        // Get timestamp. If it is already acquired it is ignored
+                        if (!timestamp_list.Contains(values[1]))
+                            timestamp_list.Add(values[1]);
+
+                        // Get region. If it is already acquired it is ignored
+                        string region = values[0];
+                        if (!region_list.Contains(region))
+                            region_list.Add(region);
+
+                        // Check if region is already added
+                        if (spainData_confirmedDict.ContainsKey(region))
+                        {
+                            // Add data to its dictionary
+                            spainData_confirmedDict[region].NATIONAL_DATA.DATA.Add(values[1], Convert.ToInt32(values[2]));
+                            spainData_deathsDict[region].NATIONAL_DATA.DATA.Add(values[1], Convert.ToInt32(values[5]));
+                            spainData_recoveredDict[region].NATIONAL_DATA.DATA.Add(values[1], Convert.ToInt32(values[6]));
+                        }
+                        else
+                        {
+                            // Get data with timestamps
+                            Dictionary<string, int> confirmedDict = new Dictionary<string, int>();
+                            confirmedDict.Add(values[1], Convert.ToInt32(values[2]));
+                            Dictionary<string, int> deathsDict = new Dictionary<string, int>();
+                            deathsDict.Add(values[1], Convert.ToInt32(values[5]));
+                            Dictionary<string, int> recoveredDict = new Dictionary<string, int>();
+                            recoveredDict.Add(values[1], Convert.ToInt32(values[6]));
+
+                            DataElement confirmedElement = new DataElement(new double[] { 0, 0 }, confirmedDict);
+                            DataNational confirmedNational = new DataNational(region, confirmedElement);
+                            DataElement deathsElement = new DataElement(new double[] { 0, 0 }, deathsDict);
+                            DataNational deathsNational = new DataNational(region, deathsElement);
+                            DataElement recoveredElement = new DataElement(new double[] { 0, 0 }, recoveredDict);
+                            DataNational recoveredNational = new DataNational(region, recoveredElement);
+
+                            // Add to spain dictionary
+                            spainData_confirmedDict.Add(region, confirmedNational);
+                            spainData_deathsDict.Add(region, deathsNational);
+                            spainData_recoveredDict.Add(region, recoveredNational);
+                        }
+                    }
+                }
+            }
+
+            Debug.WriteLine(spainData_confirmedDict.Count);
+
+            return result;
+        }
     }
 }

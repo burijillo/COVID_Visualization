@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Globalization;
+using System.Net;
 using OxyPlot;
 using OxyPlot.Series;
 using OxyPlot.Axes;
@@ -25,13 +26,19 @@ namespace COVID_Visualization
     {
         private bool isDataParsed = false;
         Dictionary<string, DataNational> globalDataConfirmed_dict = new Dictionary<string, DataNational>();
+        Dictionary<string, DataNational> spainDataConfirmed_dict = new Dictionary<string, DataNational>();
         Dictionary<string, DataNational> globalDataDeaths_dict = new Dictionary<string, DataNational>();
+        Dictionary<string, DataNational> spainDataDeaths_dict = new Dictionary<string, DataNational>();
         Dictionary<string, DataNational> globalDataRecovered_dict = new Dictionary<string, DataNational>();
+        Dictionary<string, DataNational> spainDataRecovered_dict = new Dictionary<string, DataNational>();
         Dictionary<string, DataLocal> localDataDaily_dict = new Dictionary<string, DataLocal>();
         List<string> timestamp_string_list = new List<string>();
+        List<string> timestampSpain_string_list = new List<string>();
         List<DateTime> timestamp_dt_list = new List<DateTime>();
+        List<DateTime> timestampSpain_dt_list = new List<DateTime>();
 
         List<string> countryList = new List<string>();
+        List<string> spainRegionList = new List<string>();
 
         public event EventHandler _data_parsed_event;
 
@@ -43,6 +50,7 @@ namespace COVID_Visualization
         PlotModel MainPlotModel;
         PlotModel mainGraphicPlotModel;
         PlotModel mainBarPlotModel;
+        PlotModel spainPlotModel;
 
         #region Initialization
 
@@ -77,6 +85,7 @@ namespace COVID_Visualization
             mainPlotView = new PlotView();
             mainGraphicPlotModel = new PlotModel();
             mainBarPlotModel = new PlotModel();
+            spainPlotModel = new PlotModel();
 
             MainPlotModel.PlotType = PlotType.XY;
             mainPlotView.Model = MainPlotModel;
@@ -97,11 +106,19 @@ namespace COVID_Visualization
             //mainBarPlotModel.Axes.Add(new DateTimeAxis { Position = AxisPosition.Bottom, StringFormat = "d/M" });
             //mainBarPlotModel.Axes.Add(new LinearAxis { Position = AxisPosition.Left, MaximumPadding = 0.1, MinimumPadding = 0.1, MajorGridlineStyle = LineStyle.Solid });
 
+            spainPlotModel.PlotType = PlotType.XY;
+            spainPlotView.Model = spainPlotModel;
+            spainPlotModel.LegendPosition = LegendPosition.LeftTop;
+            spainPlotModel.Axes.Add(new DateTimeAxis { Position = AxisPosition.Bottom, StringFormat = "d/M" });
+            spainPlotModel.Axes.Add(new LinearAxis { Position = AxisPosition.Left, MaximumPadding = 0.1, MinimumPadding = 0.1, MajorGridlineStyle = LineStyle.Solid });
+
             mainPlotView.Dock = DockStyle.Fill;
             tableLayoutPanel3.Controls.Add(mainPlotView, 0, 0);
 
             plotTypeComboBox.DataSource = Enum.GetValues(typeof(PlotTypes));
             plotTypeComboBox.SelectedItem = PlotTypes.Confirmed_deaths_recovered.ToString();
+            spainPlotTypeComboBox.DataSource = Enum.GetValues(typeof(PlotTypes));
+            spainPlotTypeComboBox.SelectedItem = PlotTypes.Confirmed_deaths_recovered.ToString();
         }
 
         private void InitializeMapView()
@@ -301,7 +318,7 @@ namespace COVID_Visualization
                     clearPlot();
 
                     List<string> SeriesNames = new List<string>();
-                    List<List<PointF>> globalList = GetPlotType((PlotTypes)Enum.Parse(typeof(PlotTypes), plotTypeComboBox.SelectedItem.ToString()), out SeriesNames);
+                    List<List<PointF>> globalList = GetPlotType((PlotTypes)Enum.Parse(typeof(PlotTypes), plotTypeComboBox.SelectedItem.ToString()), false, out SeriesNames);
 
                     for (int i = 0; i < globalList.Count; i++)
                     {
@@ -335,11 +352,21 @@ namespace COVID_Visualization
             }
         }
 
-        private void ConvertTimeStringToDT()
+        private void ConvertTimeStringToDT(bool spain_data)
         {
-            foreach(string item in timestamp_string_list)
+            if (!spain_data)
             {
-                timestamp_dt_list.Add(DateTime.ParseExact(item, "M/d/yy", CultureInfo.InvariantCulture));
+                foreach (string item in timestamp_string_list)
+                {
+                    timestamp_dt_list.Add(DateTime.ParseExact(item, "M/d/yy", CultureInfo.InvariantCulture));
+                } 
+            }
+            else
+            {
+                foreach (string item in timestampSpain_string_list)
+                {
+                    timestampSpain_dt_list.Add(DateTime.ParseExact(item, "dd/MM/yyyy", CultureInfo.InvariantCulture));
+                }
             }
         }
 
@@ -349,6 +376,63 @@ namespace COVID_Visualization
             MainPlotModel.Axes[0].Reset();
             MainPlotModel.Axes[1].Reset();
             mainPlotView.InvalidatePlot(true);
+        }
+
+        private void spainPlotRefreshButton_Click(object sender, EventArgs e)
+        {
+            clearSpainPlot();
+            List<string> SeriesNames;
+            List<List<PointF>> spainList = GetPlotType((PlotTypes)Enum.Parse(typeof(PlotTypes), spainPlotTypeComboBox.SelectedItem.ToString()), true, out SeriesNames);
+
+            for (int i = 0; i < spainList.Count; i++)
+            {
+                LineSeries serie = new LineSeries();
+
+                serie.MarkerSize = 2;
+                serie.MarkerFill = Color.Gray.ToOxyColor();
+                serie.MarkerType = MarkerType.Circle;
+                serie.LineStyle = LineStyle.Solid;
+                serie.Color = ColorTypes()[i].ToOxyColor();
+                serie.Title = SeriesNames[i];
+                //serie.Smooth = true;
+
+                foreach (var item in spainList[i])
+                {
+                    DataPoint point = new DataPoint(DateTimeAxis.ToDouble(timestampSpain_dt_list[(int)item.X]), item.Y);
+                    serie.Points.Add(point);
+                }
+
+                spainPlotModel.Series.Add(serie);
+                spainPlotView.InvalidatePlot(true);
+            }
+
+            // Configure datetime axis according to data
+            DateTime firstEntry = DateTime.ParseExact(timestampSpain_string_list[0], "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            MainPlotModel.Axes[0].Minimum = DateTimeAxis.ToDouble(firstEntry);
+            DateTime lastEntry = DateTime.ParseExact(timestampSpain_string_list[timestampSpain_string_list.Count - 1], "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            MainPlotModel.Axes[0].Maximum = DateTimeAxis.ToDouble(lastEntry);
+        }
+
+        private void spainLogScaleCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (spainLogScaleCheckBox.Checked)
+            {
+                spainPlotModel.Axes[1].Reset();
+                spainPlotModel.Axes[1] = new LogarithmicAxis { Position = AxisPosition.Left, MaximumPadding = 0.1, MinimumPadding = 0.1, MajorGridlineStyle = LineStyle.Solid };
+            }
+            else
+            {
+                spainPlotModel.Axes[1].Reset();
+                spainPlotModel.Axes[1] = new LinearAxis { Position = AxisPosition.Left, MaximumPadding = 0.1, MinimumPadding = 0.1, MajorGridlineStyle = LineStyle.Solid };
+            }
+        }
+
+        private void clearSpainPlot()
+        {
+            spainPlotModel.Series.Clear();
+            spainPlotModel.Axes[0].Reset();
+            spainPlotModel.Axes[1].Reset();
+            spainPlotView.InvalidatePlot(true);
         }
 
         #endregion
@@ -394,6 +478,34 @@ namespace COVID_Visualization
 
         #endregion
 
+        #region Spain data
+
+        // This is not done in other thread as it is not recquired at this day
+        private void spainGetDataButton_Click(object sender, EventArgs e)
+        {
+            using(var client = new WebClient())
+            {
+                ServicePointManager.Expect100Continue = true;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+                client.DownloadFile("https://covid19.isciii.es/resources/serie_historica_acumulados.csv", "tmp_spain_data.csv");
+            }
+
+            DataParser dataParser = new DataParser();
+            dataParser.CSVSpainDataParser("tmp_spain_data.csv", out spainDataConfirmed_dict, out spainDataDeaths_dict, out spainDataRecovered_dict, out timestampSpain_string_list, out spainRegionList);
+
+            // Fill region data combobox
+            foreach (string region in spainRegionList)
+            {
+                spainRegionComboBox.Items.Add(region);
+            }
+            spainRegionComboBox.SelectedItem = "MD";
+
+            ConvertTimeStringToDT(true);
+        }
+
+        #endregion
+
         public void _data_parsed_triggered(object sender, EventArgs e)
         {
             isDataParsed = true;
@@ -432,7 +544,7 @@ namespace COVID_Visualization
             });
 
             // Get datetime data from string
-            ConvertTimeStringToDT();
+            ConvertTimeStringToDT(false);
 
             GetMainGlobalPlot();
             GetMainGlobalBarPlot();
@@ -452,29 +564,41 @@ namespace COVID_Visualization
             return new Color[] { Color.Black, Color.DarkBlue, Color.DarkRed, Color.DarkGoldenrod };
         }
 
-        private List<List<PointF>> GetPlotType(PlotTypes plotTypes, out List<string> series_name)
+        private List<List<PointF>> GetPlotType(PlotTypes plotTypes, bool spain_data, out List<string> series_name)
         {
             List<List<PointF>> result = new List<List<PointF>>();
             series_name = new List<string>();
             switch (plotTypes)
             {
                 case PlotTypes.Confirmed_deaths_recovered:
-                    result = dataPlot.GetListOfPoints_CDR(globalDataConfirmed_dict, globalDataDeaths_dict, globalDataRecovered_dict, countryComboBox.Text, out series_name);
+                    if (!spain_data)
+                        result = dataPlot.GetListOfPoints_CDR(globalDataConfirmed_dict, globalDataDeaths_dict, globalDataRecovered_dict, countryComboBox.Text, out series_name);
+                    else
+                        result = dataPlot.GetListOfPoints_CDR(spainDataConfirmed_dict, spainDataDeaths_dict, spainDataRecovered_dict, spainRegionComboBox.Text, out series_name);
 
                     break;
 
                 case PlotTypes.Daily_confirmed:
-                    result = dataPlot.GetListOfPoints_dailyConfirmed(globalDataConfirmed_dict, countryComboBox.Text, out series_name);
+                    if (!spain_data)
+                        result = dataPlot.GetListOfPoints_dailyConfirmed(globalDataConfirmed_dict, countryComboBox.Text, out series_name);
+                    else
+                        result = dataPlot.GetListOfPoints_dailyConfirmed(spainDataConfirmed_dict, spainRegionComboBox.Text, out series_name);
 
                     break;
 
                 case PlotTypes.Daily_deaths:
-                    result = dataPlot.GetListOfPoints_dailyDeaths(globalDataDeaths_dict, countryComboBox.Text, out series_name);
+                    if (!spain_data)
+                        result = dataPlot.GetListOfPoints_dailyDeaths(globalDataDeaths_dict, countryComboBox.Text, out series_name);
+                    else
+                        result = dataPlot.GetListOfPoints_dailyDeaths(spainDataDeaths_dict, spainRegionComboBox.Text, out series_name);
 
                     break;
 
                 case PlotTypes.Letality:
-                    result = dataPlot.GetListOfPoints_dailyLetality(globalDataConfirmed_dict, globalDataDeaths_dict, countryComboBox.Text, out series_name);
+                    if (!spain_data)
+                        result = dataPlot.GetListOfPoints_dailyLetality(globalDataConfirmed_dict, globalDataDeaths_dict, countryComboBox.Text, out series_name);
+                    else
+                        result = dataPlot.GetListOfPoints_dailyLetality(spainDataConfirmed_dict, spainDataDeaths_dict, spainRegionComboBox.Text, out series_name);
 
                     break;
 

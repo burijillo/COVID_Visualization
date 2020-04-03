@@ -48,7 +48,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.countryComboBox = new System.Windows.Forms.ComboBox();
-            this.logScaleCheckBox = new System.Windows.Forms.CheckBox();
             this.mapTabPage = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.mainGMapControl = new GMap.NET.WindowsForms.GMapControl();
@@ -59,6 +58,21 @@
             this.deathsMapRadioButton = new System.Windows.Forms.RadioButton();
             this.confirmedMapRadioButton = new System.Windows.Forms.RadioButton();
             this.mainBarPlotView = new OxyPlot.WindowsForms.PlotView();
+            this.spainDataTabPage = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
+            this.spainGetDataButton = new System.Windows.Forms.Button();
+            this.spainPlotView = new OxyPlot.WindowsForms.PlotView();
+            this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.spainPlotTypeComboBox = new System.Windows.Forms.ComboBox();
+            this.spainPlotRefreshButton = new System.Windows.Forms.Button();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.spainRegionComboBox = new System.Windows.Forms.ComboBox();
+            this.spainLogScaleCheckBox = new System.Windows.Forms.CheckBox();
+            this.logScaleCheckBox = new System.Windows.Forms.CheckBox();
             this.mainTabControl.SuspendLayout();
             this.configTabPage.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -75,6 +89,12 @@
             this.tableLayoutPanel5.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.spainDataTabPage.SuspendLayout();
+            this.tableLayoutPanel8.SuspendLayout();
+            this.tableLayoutPanel9.SuspendLayout();
+            this.tableLayoutPanel10.SuspendLayout();
+            this.panel4.SuspendLayout();
+            this.panel5.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainTabControl
@@ -82,6 +102,7 @@
             this.mainTabControl.Controls.Add(this.configTabPage);
             this.mainTabControl.Controls.Add(this.plotsTabPage);
             this.mainTabControl.Controls.Add(this.mapTabPage);
+            this.mainTabControl.Controls.Add(this.spainDataTabPage);
             this.mainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainTabControl.Location = new System.Drawing.Point(0, 0);
             this.mainTabControl.Name = "mainTabControl";
@@ -97,7 +118,7 @@
             this.configTabPage.Padding = new System.Windows.Forms.Padding(3);
             this.configTabPage.Size = new System.Drawing.Size(1255, 600);
             this.configTabPage.TabIndex = 0;
-            this.configTabPage.Text = "Data";
+            this.configTabPage.Text = "Global data";
             this.configTabPage.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel1
@@ -112,8 +133,8 @@
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 6.937799F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 93.0622F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.050505F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 94.94949F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1249, 594);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -130,7 +151,7 @@
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(1249, 41);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(1249, 30);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // getDataFromWebButton
@@ -138,7 +159,7 @@
             this.getDataFromWebButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.getDataFromWebButton.Location = new System.Drawing.Point(3, 3);
             this.getDataFromWebButton.Name = "getDataFromWebButton";
-            this.getDataFromWebButton.Size = new System.Drawing.Size(133, 35);
+            this.getDataFromWebButton.Size = new System.Drawing.Size(133, 24);
             this.getDataFromWebButton.TabIndex = 0;
             this.getDataFromWebButton.Text = "Get data";
             this.getDataFromWebButton.UseVisualStyleBackColor = true;
@@ -148,10 +169,10 @@
             // 
             this.mainDataPanel.Controls.Add(this.tableLayoutPanel7);
             this.mainDataPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainDataPanel.Location = new System.Drawing.Point(0, 41);
+            this.mainDataPanel.Location = new System.Drawing.Point(0, 30);
             this.mainDataPanel.Margin = new System.Windows.Forms.Padding(0);
             this.mainDataPanel.Name = "mainDataPanel";
-            this.mainDataPanel.Size = new System.Drawing.Size(1249, 553);
+            this.mainDataPanel.Size = new System.Drawing.Size(1249, 564);
             this.mainDataPanel.TabIndex = 1;
             // 
             // tableLayoutPanel7
@@ -169,7 +190,7 @@
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             this.tableLayoutPanel7.RowCount = 1;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(1249, 553);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(1249, 564);
             this.tableLayoutPanel7.TabIndex = 1;
             // 
             // mainDataGridView
@@ -178,7 +199,7 @@
             this.mainDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainDataGridView.Location = new System.Drawing.Point(3, 3);
             this.mainDataGridView.Name = "mainDataGridView";
-            this.mainDataGridView.Size = new System.Drawing.Size(328, 547);
+            this.mainDataGridView.Size = new System.Drawing.Size(328, 558);
             this.mainDataGridView.TabIndex = 0;
             // 
             // mainGraphicPlotView
@@ -187,7 +208,7 @@
             this.mainGraphicPlotView.Location = new System.Drawing.Point(337, 3);
             this.mainGraphicPlotView.Name = "mainGraphicPlotView";
             this.mainGraphicPlotView.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.mainGraphicPlotView.Size = new System.Drawing.Size(639, 547);
+            this.mainGraphicPlotView.Size = new System.Drawing.Size(639, 558);
             this.mainGraphicPlotView.TabIndex = 1;
             this.mainGraphicPlotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.mainGraphicPlotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
@@ -316,19 +337,6 @@
             this.countryComboBox.Name = "countryComboBox";
             this.countryComboBox.Size = new System.Drawing.Size(258, 21);
             this.countryComboBox.TabIndex = 1;
-            // 
-            // logScaleCheckBox
-            // 
-            this.logScaleCheckBox.AutoSize = true;
-            this.logScaleCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.logScaleCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logScaleCheckBox.Location = new System.Drawing.Point(3, 83);
-            this.logScaleCheckBox.Name = "logScaleCheckBox";
-            this.logScaleCheckBox.Size = new System.Drawing.Size(252, 19);
-            this.logScaleCheckBox.TabIndex = 5;
-            this.logScaleCheckBox.Text = "Logarthmic scale";
-            this.logScaleCheckBox.UseVisualStyleBackColor = true;
-            this.logScaleCheckBox.CheckedChanged += new System.EventHandler(this.logScaleCheckBox_CheckedChanged);
             // 
             // mapTabPage
             // 
@@ -468,12 +476,201 @@
             this.mainBarPlotView.Location = new System.Drawing.Point(982, 3);
             this.mainBarPlotView.Name = "mainBarPlotView";
             this.mainBarPlotView.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.mainBarPlotView.Size = new System.Drawing.Size(264, 547);
+            this.mainBarPlotView.Size = new System.Drawing.Size(264, 558);
             this.mainBarPlotView.TabIndex = 2;
             this.mainBarPlotView.Text = "plotView1";
             this.mainBarPlotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.mainBarPlotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.mainBarPlotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            // 
+            // spainDataTabPage
+            // 
+            this.spainDataTabPage.Controls.Add(this.tableLayoutPanel8);
+            this.spainDataTabPage.Location = new System.Drawing.Point(4, 22);
+            this.spainDataTabPage.Name = "spainDataTabPage";
+            this.spainDataTabPage.Size = new System.Drawing.Size(1255, 600);
+            this.spainDataTabPage.TabIndex = 3;
+            this.spainDataTabPage.Text = "Spain data";
+            this.spainDataTabPage.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel8
+            // 
+            this.tableLayoutPanel8.ColumnCount = 2;
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 85.65737F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.34263F));
+            this.tableLayoutPanel8.Controls.Add(this.tableLayoutPanel9, 0, 0);
+            this.tableLayoutPanel8.Controls.Add(this.spainPlotView, 0, 1);
+            this.tableLayoutPanel8.Controls.Add(this.tableLayoutPanel10, 1, 1);
+            this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel8.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel8.Name = "tableLayoutPanel8";
+            this.tableLayoutPanel8.RowCount = 2;
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 95F));
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(1255, 600);
+            this.tableLayoutPanel8.TabIndex = 0;
+            // 
+            // tableLayoutPanel9
+            // 
+            this.tableLayoutPanel9.ColumnCount = 3;
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 11.19593F));
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.486F));
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75.44529F));
+            this.tableLayoutPanel9.Controls.Add(this.spainGetDataButton, 0, 0);
+            this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel9.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel9.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel9.Name = "tableLayoutPanel9";
+            this.tableLayoutPanel9.RowCount = 1;
+            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(1075, 30);
+            this.tableLayoutPanel9.TabIndex = 1;
+            // 
+            // spainGetDataButton
+            // 
+            this.spainGetDataButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.spainGetDataButton.Location = new System.Drawing.Point(3, 3);
+            this.spainGetDataButton.Name = "spainGetDataButton";
+            this.spainGetDataButton.Size = new System.Drawing.Size(114, 24);
+            this.spainGetDataButton.TabIndex = 0;
+            this.spainGetDataButton.Text = "Get data";
+            this.spainGetDataButton.UseVisualStyleBackColor = true;
+            this.spainGetDataButton.Click += new System.EventHandler(this.spainGetDataButton_Click);
+            // 
+            // spainPlotView
+            // 
+            this.spainPlotView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.spainPlotView.Location = new System.Drawing.Point(3, 33);
+            this.spainPlotView.Name = "spainPlotView";
+            this.spainPlotView.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.spainPlotView.Size = new System.Drawing.Size(1069, 564);
+            this.spainPlotView.TabIndex = 2;
+            this.spainPlotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.spainPlotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.spainPlotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            // 
+            // tableLayoutPanel10
+            // 
+            this.tableLayoutPanel10.ColumnCount = 1;
+            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel10.Controls.Add(this.panel4, 0, 1);
+            this.tableLayoutPanel10.Controls.Add(this.spainPlotRefreshButton, 0, 9);
+            this.tableLayoutPanel10.Controls.Add(this.panel5, 0, 0);
+            this.tableLayoutPanel10.Controls.Add(this.spainLogScaleCheckBox, 0, 2);
+            this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel10.Location = new System.Drawing.Point(1075, 30);
+            this.tableLayoutPanel10.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel10.Name = "tableLayoutPanel10";
+            this.tableLayoutPanel10.RowCount = 10;
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(180, 570);
+            this.tableLayoutPanel10.TabIndex = 3;
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.label3);
+            this.panel4.Controls.Add(this.spainPlotTypeComboBox);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel4.Location = new System.Drawing.Point(0, 40);
+            this.panel4.Margin = new System.Windows.Forms.Padding(0);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(180, 40);
+            this.panel4.TabIndex = 4;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label3.Location = new System.Drawing.Point(0, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(25, 13);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Plot";
+            // 
+            // spainPlotTypeComboBox
+            // 
+            this.spainPlotTypeComboBox.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.spainPlotTypeComboBox.FormattingEnabled = true;
+            this.spainPlotTypeComboBox.Location = new System.Drawing.Point(0, 19);
+            this.spainPlotTypeComboBox.Name = "spainPlotTypeComboBox";
+            this.spainPlotTypeComboBox.Size = new System.Drawing.Size(180, 21);
+            this.spainPlotTypeComboBox.TabIndex = 2;
+            // 
+            // spainPlotRefreshButton
+            // 
+            this.spainPlotRefreshButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.spainPlotRefreshButton.Location = new System.Drawing.Point(3, 504);
+            this.spainPlotRefreshButton.Name = "spainPlotRefreshButton";
+            this.spainPlotRefreshButton.Size = new System.Drawing.Size(174, 63);
+            this.spainPlotRefreshButton.TabIndex = 0;
+            this.spainPlotRefreshButton.Text = "Refresh";
+            this.spainPlotRefreshButton.UseVisualStyleBackColor = true;
+            this.spainPlotRefreshButton.Click += new System.EventHandler(this.spainPlotRefreshButton_Click);
+            // 
+            // panel5
+            // 
+            this.panel5.Controls.Add(this.label4);
+            this.panel5.Controls.Add(this.spainRegionComboBox);
+            this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel5.Location = new System.Drawing.Point(0, 0);
+            this.panel5.Margin = new System.Windows.Forms.Padding(0);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(180, 40);
+            this.panel5.TabIndex = 3;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label4.Location = new System.Drawing.Point(0, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(41, 13);
+            this.label4.TabIndex = 0;
+            this.label4.Text = "Region";
+            // 
+            // spainRegionComboBox
+            // 
+            this.spainRegionComboBox.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.spainRegionComboBox.FormattingEnabled = true;
+            this.spainRegionComboBox.Location = new System.Drawing.Point(0, 19);
+            this.spainRegionComboBox.Name = "spainRegionComboBox";
+            this.spainRegionComboBox.Size = new System.Drawing.Size(180, 21);
+            this.spainRegionComboBox.TabIndex = 1;
+            // 
+            // spainLogScaleCheckBox
+            // 
+            this.spainLogScaleCheckBox.AutoSize = true;
+            this.spainLogScaleCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.spainLogScaleCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.spainLogScaleCheckBox.Location = new System.Drawing.Point(3, 83);
+            this.spainLogScaleCheckBox.Name = "spainLogScaleCheckBox";
+            this.spainLogScaleCheckBox.Size = new System.Drawing.Size(174, 19);
+            this.spainLogScaleCheckBox.TabIndex = 5;
+            this.spainLogScaleCheckBox.Text = "Logarthmic scale";
+            this.spainLogScaleCheckBox.UseVisualStyleBackColor = true;
+            this.spainLogScaleCheckBox.CheckedChanged += new System.EventHandler(this.spainLogScaleCheckBox_CheckedChanged);
+            // 
+            // logScaleCheckBox
+            // 
+            this.logScaleCheckBox.AutoSize = true;
+            this.logScaleCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.logScaleCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logScaleCheckBox.Location = new System.Drawing.Point(3, 83);
+            this.logScaleCheckBox.Name = "logScaleCheckBox";
+            this.logScaleCheckBox.Size = new System.Drawing.Size(252, 19);
+            this.logScaleCheckBox.TabIndex = 5;
+            this.logScaleCheckBox.Text = "Logarthmic scale";
+            this.logScaleCheckBox.UseVisualStyleBackColor = true;
+            this.logScaleCheckBox.CheckedChanged += new System.EventHandler(this.logScaleCheckBox_CheckedChanged);
             // 
             // MainScreen
             // 
@@ -503,6 +700,15 @@
             this.tableLayoutPanel6.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            this.spainDataTabPage.ResumeLayout(false);
+            this.tableLayoutPanel8.ResumeLayout(false);
+            this.tableLayoutPanel9.ResumeLayout(false);
+            this.tableLayoutPanel10.ResumeLayout(false);
+            this.tableLayoutPanel10.PerformLayout();
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -526,7 +732,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.CheckBox logScaleCheckBox;
         private System.Windows.Forms.TabPage mapTabPage;
         private GMap.NET.WindowsForms.GMapControl mainGMapControl;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
@@ -539,6 +744,21 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
         private OxyPlot.WindowsForms.PlotView mainGraphicPlotView;
         private OxyPlot.WindowsForms.PlotView mainBarPlotView;
+        private System.Windows.Forms.TabPage spainDataTabPage;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
+        private System.Windows.Forms.Button spainGetDataButton;
+        private OxyPlot.WindowsForms.PlotView spainPlotView;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox spainPlotTypeComboBox;
+        private System.Windows.Forms.Button spainPlotRefreshButton;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox spainRegionComboBox;
+        private System.Windows.Forms.CheckBox spainLogScaleCheckBox;
+        private System.Windows.Forms.CheckBox logScaleCheckBox;
     }
 }
 

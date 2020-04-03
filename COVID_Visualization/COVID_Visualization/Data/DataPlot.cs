@@ -24,7 +24,6 @@ namespace COVID_Visualization.Data
             float counter = 0;
             foreach (var item in globalDataConfirmed_dict[country].NATIONAL_DATA.DATA)
             {
-                DateTime datetime = DateTime.ParseExact(item.Key, "M/d/yy", CultureInfo.InvariantCulture);
                 float value = (float)item.Value;
                 confirmed_pointList.Add(new PointF(counter, value));
                 counter++;
