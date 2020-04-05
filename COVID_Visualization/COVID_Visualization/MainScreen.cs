@@ -45,12 +45,14 @@ namespace COVID_Visualization
         WaitForm waitForm;
         DataPlot dataPlot;
         DataMap dataMap;
+        Models models;
         BackgroundWorker getData_bg;
         PlotView mainPlotView;
         PlotModel MainPlotModel;
         PlotModel mainGraphicPlotModel;
         PlotModel mainBarPlotModel;
         PlotModel spainPlotModel;
+        PlotModel modelPlotModel;
 
         #region Initialization
 
@@ -61,11 +63,13 @@ namespace COVID_Visualization
             InitializeMainScreen();
             InitializePlotView();
             InitializeMapView();
+            InitializeModelsView();
 
             _data_parsed_event += _data_parsed_triggered;
 
             dataPlot = new DataPlot();
             dataMap = new DataMap();
+            models = new Models();
 
             getData_bg = new BackgroundWorker();
             getData_bg.DoWork += GetData_bg_DoWork;
@@ -86,6 +90,7 @@ namespace COVID_Visualization
             mainGraphicPlotModel = new PlotModel();
             mainBarPlotModel = new PlotModel();
             spainPlotModel = new PlotModel();
+            modelPlotModel = new PlotModel();
 
             MainPlotModel.PlotType = PlotType.XY;
             mainPlotView.Model = MainPlotModel;
@@ -112,6 +117,10 @@ namespace COVID_Visualization
             spainPlotModel.Axes.Add(new DateTimeAxis { Position = AxisPosition.Bottom, StringFormat = "d/M" });
             spainPlotModel.Axes.Add(new LinearAxis { Position = AxisPosition.Left, MaximumPadding = 0.1, MinimumPadding = 0.1, MajorGridlineStyle = LineStyle.Solid });
 
+            modelPlotModel.PlotType = PlotType.XY;
+            modelPlotView.Model = modelPlotModel;
+            modelPlotModel.LegendPosition = LegendPosition.LeftTop;
+
             mainPlotView.Dock = DockStyle.Fill;
             tableLayoutPanel3.Controls.Add(mainPlotView, 0, 0);
 
@@ -125,6 +134,14 @@ namespace COVID_Visualization
         {
             mainGMapControl.MapProvider = GMap.NET.MapProviders.GoogleMapProvider.Instance;
             GMaps.Instance.Mode = AccessMode.ServerOnly;
+        }
+
+        private void InitializeModelsView()
+        {
+            foreach(var item in Enum.GetNames(typeof(ModelTypes)))
+            {
+                modelsComboBox.Items.Add(item.ToString());
+            }
         }
 
         #endregion
@@ -502,6 +519,46 @@ namespace COVID_Visualization
             spainRegionComboBox.SelectedItem = "MD";
 
             ConvertTimeStringToDT(true);
+        }
+
+        #endregion
+
+        #region Models
+
+        private void modelsComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(modelsComboBox.SelectedItem.ToString()))
+            {
+                Models models = new Models();
+
+                // Get model data
+                List<List<PointF>> global_data = new List<List<PointF>>();
+                List<string> series_name;
+                // TODO this generic
+                global_data = models.simpleSIR_model(out series_name);
+
+                // Plot data
+                for (int i = 0; i < global_data.Count; i++)
+                {
+                    LineSeries serie = new LineSeries();
+
+                    serie.MarkerSize = 2;
+                    serie.MarkerFill = Color.Gray.ToOxyColor();
+                    serie.MarkerType = MarkerType.Circle;
+                    serie.LineStyle = LineStyle.Solid;
+                    serie.Color = ColorTypes()[i].ToOxyColor();
+                    serie.Title = series_name[i];
+
+                    foreach (var item in global_data[i])
+                    {
+                        DataPoint point = new DataPoint(item.X, item.Y);
+                        serie.Points.Add(point);
+                    }
+
+                    modelPlotModel.Series.Add(serie);
+                    modelPlotView.InvalidatePlot(true);
+                }
+            }
         }
 
         #endregion
