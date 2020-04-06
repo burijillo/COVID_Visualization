@@ -41,6 +41,7 @@ namespace COVID_Visualization
         List<string> spainRegionList = new List<string>();
 
         public event EventHandler _data_parsed_event;
+        public event EventHandler _model_data_event;
 
         WaitForm waitForm;
         DataPlot dataPlot;
@@ -66,6 +67,7 @@ namespace COVID_Visualization
             InitializeModelsView();
 
             _data_parsed_event += _data_parsed_triggered;
+            _model_data_event += _model_data_updated;
 
             dataPlot = new DataPlot();
             dataMap = new DataMap();
@@ -525,39 +527,194 @@ namespace COVID_Visualization
 
         #region Models
 
+        private List<List<PointF>> getSelectedModelData(object sender, ModelTypes model_type, out List<string> series_name)
+        {
+            List<List<PointF>> result = new List<List<PointF>>();
+            series_name = new List<string>();
+
+            switch (model_type)
+            {
+                case ModelTypes.Simple:
+                    // Check sender control
+                    int _s_perc = ((TrackBar)(modelsTableLayoutPanel.GetControlFromPosition(0, 2)) as TrackBar).Value;
+                    double _infected = 0;
+                    double _removed = 0;
+                    double _inf_rate = 0;
+                    if (!string.IsNullOrEmpty(((TextBox)(modelsTableLayoutPanel.GetControlFromPosition(0, 4)) as TextBox).Text))
+                         _infected = Convert.ToDouble(((TextBox)(modelsTableLayoutPanel.GetControlFromPosition(0, 4)) as TextBox).Text);
+                    if (!string.IsNullOrEmpty(((TextBox)(modelsTableLayoutPanel.GetControlFromPosition(0, 6)) as TextBox).Text))
+                        _removed = Convert.ToDouble(((TextBox)(modelsTableLayoutPanel.GetControlFromPosition(0, 6)) as TextBox).Text);
+                    if (!string.IsNullOrEmpty(((TextBox)(modelsTableLayoutPanel.GetControlFromPosition(0, 8)) as TextBox).Text))
+                        _inf_rate = Convert.ToDouble(((TextBox)(modelsTableLayoutPanel.GetControlFromPosition(0, 8)) as TextBox).Text.Replace('.',','));
+
+                    result = models.simpleSIR_model(_s_perc, _infected, _removed, _inf_rate, out series_name);
+
+                    break;
+
+                default:
+                    MessageBox.Show("Wrong model selected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    break;
+            }
+
+            return result;
+        }
+
+        private void generateModelControls_Simple()
+        {
+            // TODO clear every control except main selector
+            int row_count = modelsTableLayoutPanel.RowCount;
+            for (int i = 1; i < row_count; i++)
+            {
+                Control c = modelsTableLayoutPanel .GetControlFromPosition(0, i);
+                modelsTableLayoutPanel.Controls.Remove(c);
+                modelsTableLayoutPanel.RowCount--;
+            }
+
+            // Generate susceptible population control input
+            Label _trackbarLabel = new Label();
+            _trackbarLabel.Text = "Susceptible population percentage";
+            _trackbarLabel.Dock = DockStyle.Fill;
+            _trackbarLabel.TextAlign = ContentAlignment.MiddleLeft;
+            modelsTableLayoutPanel.RowCount += 1;
+            modelsTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            modelsTableLayoutPanel.Controls.Add(_trackbarLabel, 0, 1);
+
+            TrackBar _trackbar = new TrackBar();
+            _trackbar.Maximum = 100;
+            _trackbar.Minimum = 0;
+            _trackbar.Value = 90;
+            _trackbar.Dock = DockStyle.Fill;
+            _trackbar.ValueChanged += _modelControl_ValueChanged;
+            modelsTableLayoutPanel.RowCount += 1;
+            modelsTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            modelsTableLayoutPanel.Controls.Add(_trackbar, 0, 2);
+
+            // Generate infected population control input
+            Label _infectedLabel = new Label();
+            _infectedLabel.Text = "Initial infected";
+            _infectedLabel.Dock = DockStyle.Fill;
+            _infectedLabel.TextAlign = ContentAlignment.MiddleLeft;
+            modelsTableLayoutPanel.RowCount += 1;
+            modelsTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            modelsTableLayoutPanel.Controls.Add(_infectedLabel, 0, 3);
+
+            TextBox _infected_textBox = new TextBox();
+            _infected_textBox.Text = "0";
+            _infected_textBox.Dock = DockStyle.Fill;
+            _infected_textBox.TextChanged += _modelControl_ValueChanged;
+            modelsTableLayoutPanel.RowCount += 1;
+            modelsTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            modelsTableLayoutPanel.Controls.Add(_infected_textBox, 0, 4);
+
+            // Generate removed population control input
+            Label _removedLabel = new Label();
+            _removedLabel.Text = "Initial removed";
+            _removedLabel.Dock = DockStyle.Fill;
+            _removedLabel.TextAlign = ContentAlignment.MiddleLeft;
+            modelsTableLayoutPanel.RowCount += 1;
+            modelsTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            modelsTableLayoutPanel.Controls.Add(_removedLabel, 0, 5);
+
+            TextBox _removed_textBox = new TextBox();
+            _removed_textBox.Text = "0";
+            _removed_textBox.Dock = DockStyle.Fill;
+            _removed_textBox.TextChanged += _modelControl_ValueChanged;
+            modelsTableLayoutPanel.RowCount += 1;
+            modelsTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            modelsTableLayoutPanel.Controls.Add(_removed_textBox, 0, 6);
+
+            // Generate infected rate control input
+            Label _infectedRateLabel = new Label();
+            _infectedRateLabel.Text = "Infected rate";
+            _infectedRateLabel.Dock = DockStyle.Fill;
+            _infectedRateLabel.TextAlign = ContentAlignment.MiddleLeft;
+            modelsTableLayoutPanel.RowCount += 1;
+            modelsTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            modelsTableLayoutPanel.Controls.Add(_infectedRateLabel, 0, 7);
+
+            TextBox _infectedRate_textBox = new TextBox();
+            _infectedRate_textBox.Text = "1.0";
+            _infectedRate_textBox.Dock = DockStyle.Fill;
+            _infectedRate_textBox.TextChanged += _modelControl_ValueChanged;
+            modelsTableLayoutPanel.RowCount += 1;
+            modelsTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            modelsTableLayoutPanel.Controls.Add(_infectedRate_textBox, 0, 8);
+
+            // Add summary log
+            RichTextBox _log_richTextBox = new RichTextBox();
+            _log_richTextBox.Dock = DockStyle.Fill;
+            modelsTableLayoutPanel.RowCount += 1;
+            //modelsTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            modelsTableLayoutPanel.Controls.Add(_log_richTextBox, 0, 9);
+        }
+
+        private void _modelControl_ValueChanged(object sender, EventArgs e)
+        {
+            // This trackbar serves as input for the susceptible population percentage
+            _model_data_event.Invoke(sender, e);
+        }
+
         private void modelsComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            generateModelControls_Simple();
+            _model_data_event.Invoke(this, e);
+        }
+
+        private void refreshModelButton_Click(object sender, EventArgs e)
+        {
+            _model_data_event.Invoke(this, e);
+        }
+
+        private void _model_data_updated(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(modelsComboBox.SelectedItem.ToString()))
             {
-                Models models = new Models();
-
                 // Get model data
-                List<List<PointF>> global_data = new List<List<PointF>>();
+                List<List<PointF>> model_data = new List<List<PointF>>();
                 List<string> series_name;
-                // TODO this generic
-                global_data = models.simpleSIR_model(out series_name);
+                ModelTypes _model = (ModelTypes)Enum.Parse(typeof(ModelTypes), modelsComboBox.SelectedItem.ToString());
+                model_data = getSelectedModelData(sender, _model, out series_name);
 
-                // Plot data
-                for (int i = 0; i < global_data.Count; i++)
+                paintModelsData(model_data, series_name);
+
+                if (model_data[2].Count != 0)
                 {
-                    LineSeries serie = new LineSeries();
-
-                    serie.MarkerSize = 2;
-                    serie.MarkerFill = Color.Gray.ToOxyColor();
-                    serie.MarkerType = MarkerType.Circle;
-                    serie.LineStyle = LineStyle.Solid;
-                    serie.Color = ColorTypes()[i].ToOxyColor();
-                    serie.Title = series_name[i];
-
-                    foreach (var item in global_data[i])
-                    {
-                        DataPoint point = new DataPoint(item.X, item.Y);
-                        serie.Points.Add(point);
-                    }
-
-                    modelPlotModel.Series.Add(serie);
-                    modelPlotView.InvalidatePlot(true);
+                    // Summary log
+                    RichTextBox _log_richTextBox = (RichTextBox)(modelsTableLayoutPanel.GetControlFromPosition(0, modelsTableLayoutPanel.RowCount - 1) as RichTextBox);
+                    _log_richTextBox.Text = "Model data summary:\nIterations: " + model_data[2].Count + " \nRemoved: " + model_data[2][model_data[2].Count - 1].Y.ToString() + "\nSusceptible: " + model_data[0][model_data[0].Count - 1].Y.ToString();
                 }
+            }
+        }
+
+        private void paintModelsData(List<List<PointF>> data, List<string> series_name)
+        {
+            // Clear plot data
+            modelPlotModel.Series.Clear();
+            //modelPlotModel.Axes[0].Reset();
+            //modelPlotModel.Axes[1].Reset();
+            modelPlotView.InvalidatePlot(true);
+
+            // Plot data
+            for (int i = 0; i < data.Count; i++)
+            {
+                LineSeries serie = new LineSeries();
+
+                serie.MarkerSize = 2;
+                serie.MarkerFill = ColorTypes()[i].ToOxyColor();
+                serie.MarkerType = MarkerType.Circle;
+                serie.LineStyle = LineStyle.Solid;
+                serie.Color = ColorTypes()[i].ToOxyColor();
+                serie.Title = series_name[i];
+
+                foreach (var item in data[i])
+                {
+                    DataPoint point = new DataPoint(item.X, item.Y);
+                    serie.Points.Add(point);
+                }
+
+                modelPlotModel.Series.Add(serie);
+                modelPlotView.InvalidatePlot(true);
             }
         }
 

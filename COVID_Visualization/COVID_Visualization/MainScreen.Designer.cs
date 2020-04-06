@@ -76,8 +76,10 @@
             this.modelsTabPage = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
             this.modelPlotView = new OxyPlot.WindowsForms.PlotView();
-            this.modelsTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.TableLayoutPanel35 = new System.Windows.Forms.TableLayoutPanel();
             this.modelsComboBox = new System.Windows.Forms.ComboBox();
+            this.modelsTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.refreshModelButton = new System.Windows.Forms.Button();
             this.mainTabControl.SuspendLayout();
             this.configTabPage.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -102,6 +104,7 @@
             this.panel5.SuspendLayout();
             this.modelsTabPage.SuspendLayout();
             this.tableLayoutPanel11.SuspendLayout();
+            this.TableLayoutPanel35.SuspendLayout();
             this.modelsTableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -697,7 +700,7 @@
             this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 86.93227F));
             this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.06773F));
             this.tableLayoutPanel11.Controls.Add(this.modelPlotView, 0, 0);
-            this.tableLayoutPanel11.Controls.Add(this.modelsTableLayoutPanel, 1, 0);
+            this.tableLayoutPanel11.Controls.Add(this.TableLayoutPanel35, 1, 0);
             this.tableLayoutPanel11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel11.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel11.Name = "tableLayoutPanel11";
@@ -720,26 +723,20 @@
             this.modelPlotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.modelPlotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
-            // modelsTableLayoutPanel
+            // TableLayoutPanel35
             // 
-            this.modelsTableLayoutPanel.ColumnCount = 1;
-            this.modelsTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.modelsTableLayoutPanel.Controls.Add(this.modelsComboBox, 0, 0);
-            this.modelsTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.modelsTableLayoutPanel.Location = new System.Drawing.Point(1093, 3);
-            this.modelsTableLayoutPanel.Name = "modelsTableLayoutPanel";
-            this.modelsTableLayoutPanel.RowCount = 1;
-            this.modelsTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.modelsTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.modelsTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.modelsTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.modelsTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.modelsTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.modelsTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.modelsTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.modelsTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.modelsTableLayoutPanel.Size = new System.Drawing.Size(159, 594);
-            this.modelsTableLayoutPanel.TabIndex = 2;
+            this.TableLayoutPanel35.ColumnCount = 1;
+            this.TableLayoutPanel35.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.TableLayoutPanel35.Controls.Add(this.modelsTableLayoutPanel, 0, 0);
+            this.TableLayoutPanel35.Controls.Add(this.refreshModelButton, 0, 1);
+            this.TableLayoutPanel35.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TableLayoutPanel35.Location = new System.Drawing.Point(1093, 3);
+            this.TableLayoutPanel35.Name = "TableLayoutPanel35";
+            this.TableLayoutPanel35.RowCount = 2;
+            this.TableLayoutPanel35.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.TableLayoutPanel35.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.TableLayoutPanel35.Size = new System.Drawing.Size(159, 594);
+            this.TableLayoutPanel35.TabIndex = 2;
             // 
             // modelsComboBox
             // 
@@ -750,6 +747,31 @@
             this.modelsComboBox.Size = new System.Drawing.Size(153, 21);
             this.modelsComboBox.TabIndex = 0;
             this.modelsComboBox.SelectedIndexChanged += new System.EventHandler(this.modelsComboBox_SelectedIndexChanged);
+            // 
+            // modelsTableLayoutPanel
+            // 
+            this.modelsTableLayoutPanel.ColumnCount = 1;
+            this.modelsTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.modelsTableLayoutPanel.Controls.Add(this.modelsComboBox, 0, 0);
+            this.modelsTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.modelsTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            this.modelsTableLayoutPanel.Margin = new System.Windows.Forms.Padding(0);
+            this.modelsTableLayoutPanel.Name = "modelsTableLayoutPanel";
+            this.modelsTableLayoutPanel.RowCount = 1;
+            this.modelsTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.modelsTableLayoutPanel.Size = new System.Drawing.Size(159, 564);
+            this.modelsTableLayoutPanel.TabIndex = 2;
+            // 
+            // refreshModelButton
+            // 
+            this.refreshModelButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.refreshModelButton.Location = new System.Drawing.Point(3, 567);
+            this.refreshModelButton.Name = "refreshModelButton";
+            this.refreshModelButton.Size = new System.Drawing.Size(153, 24);
+            this.refreshModelButton.TabIndex = 3;
+            this.refreshModelButton.Text = "Refresh";
+            this.refreshModelButton.UseVisualStyleBackColor = true;
+            this.refreshModelButton.Click += new System.EventHandler(this.refreshModelButton_Click);
             // 
             // MainScreen
             // 
@@ -790,6 +812,7 @@
             this.panel5.PerformLayout();
             this.modelsTabPage.ResumeLayout(false);
             this.tableLayoutPanel11.ResumeLayout(false);
+            this.TableLayoutPanel35.ResumeLayout(false);
             this.modelsTableLayoutPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -844,8 +867,10 @@
         private System.Windows.Forms.TabPage modelsTabPage;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
         private OxyPlot.WindowsForms.PlotView modelPlotView;
-        private System.Windows.Forms.TableLayoutPanel modelsTableLayoutPanel;
+        private System.Windows.Forms.TableLayoutPanel TableLayoutPanel35;
         private System.Windows.Forms.ComboBox modelsComboBox;
+        private System.Windows.Forms.TableLayoutPanel modelsTableLayoutPanel;
+        private System.Windows.Forms.Button refreshModelButton;
     }
 }
 
