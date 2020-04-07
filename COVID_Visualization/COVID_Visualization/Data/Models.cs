@@ -16,7 +16,7 @@ namespace COVID_Visualization.Data
     class Models
     {
         // Based on https://jamesmccaffrey.wordpress.com/2020/02/11/the-kermack-mckendrick-sir-disease-model-using-c/
-        public List<List<PointF>> simpleSIR_model(int _susceptible_perc, double _infected, double _removed, double _inf_rate, out List<string> series_name)
+        public List<List<PointF>> simpleSIR_model(int _susceptible_perc, double _infected, double _removed, double _inf_rate, double _rec_rate, out List<string> series_name)
         {
             /*
             N = S(t) + I(t) + R(t)
@@ -44,7 +44,7 @@ namespace COVID_Visualization.Data
 
             double scale = 0.1;
             double b = _inf_rate;
-            double a = 0.5;
+            double a = _rec_rate;
 
             List<PointF> S_list = new List<PointF>();
             List<PointF> I_list = new List<PointF>();

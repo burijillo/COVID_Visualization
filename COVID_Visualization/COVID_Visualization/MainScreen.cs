@@ -540,14 +540,17 @@ namespace COVID_Visualization
                     double _infected = 0;
                     double _removed = 0;
                     double _inf_rate = 0;
+                    double _rec_rate = 0;
                     if (!string.IsNullOrEmpty(((TextBox)(modelsTableLayoutPanel.GetControlFromPosition(0, 4)) as TextBox).Text))
                          _infected = Convert.ToDouble(((TextBox)(modelsTableLayoutPanel.GetControlFromPosition(0, 4)) as TextBox).Text);
                     if (!string.IsNullOrEmpty(((TextBox)(modelsTableLayoutPanel.GetControlFromPosition(0, 6)) as TextBox).Text))
                         _removed = Convert.ToDouble(((TextBox)(modelsTableLayoutPanel.GetControlFromPosition(0, 6)) as TextBox).Text);
                     if (!string.IsNullOrEmpty(((TextBox)(modelsTableLayoutPanel.GetControlFromPosition(0, 8)) as TextBox).Text))
                         _inf_rate = Convert.ToDouble(((TextBox)(modelsTableLayoutPanel.GetControlFromPosition(0, 8)) as TextBox).Text.Replace('.',','));
+                    if (!string.IsNullOrEmpty(((TextBox)(modelsTableLayoutPanel.GetControlFromPosition(0, 10)) as TextBox).Text))
+                        _rec_rate = Convert.ToDouble(((TextBox)(modelsTableLayoutPanel.GetControlFromPosition(0, 10)) as TextBox).Text.Replace('.', ','));
 
-                    result = models.simpleSIR_model(_s_perc, _infected, _removed, _inf_rate, out series_name);
+                    result = models.simpleSIR_model(_s_perc, _infected, _removed, _inf_rate, _rec_rate, out series_name);
 
                     break;
 
@@ -641,12 +644,29 @@ namespace COVID_Visualization
             modelsTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             modelsTableLayoutPanel.Controls.Add(_infectedRate_textBox, 0, 8);
 
+            // Generate recovery rate control input
+            Label _recoveryRateLabel = new Label();
+            _recoveryRateLabel.Text = "Recovery rate";
+            _recoveryRateLabel.Dock = DockStyle.Fill;
+            _recoveryRateLabel.TextAlign = ContentAlignment.MiddleLeft;
+            modelsTableLayoutPanel.RowCount += 1;
+            modelsTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            modelsTableLayoutPanel.Controls.Add(_recoveryRateLabel, 0, 9);
+
+            TextBox _recoveryRate_textBox = new TextBox();
+            _recoveryRate_textBox.Text = "1.0";
+            _recoveryRate_textBox.Dock = DockStyle.Fill;
+            _recoveryRate_textBox.TextChanged += _modelControl_ValueChanged;
+            modelsTableLayoutPanel.RowCount += 1;
+            modelsTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            modelsTableLayoutPanel.Controls.Add(_recoveryRate_textBox, 0, 10);
+
             // Add summary log
             RichTextBox _log_richTextBox = new RichTextBox();
             _log_richTextBox.Dock = DockStyle.Fill;
             modelsTableLayoutPanel.RowCount += 1;
             //modelsTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            modelsTableLayoutPanel.Controls.Add(_log_richTextBox, 0, 9);
+            modelsTableLayoutPanel.Controls.Add(_log_richTextBox, 0, 11);
         }
 
         private void _modelControl_ValueChanged(object sender, EventArgs e)
@@ -682,7 +702,7 @@ namespace COVID_Visualization
                 {
                     // Summary log
                     RichTextBox _log_richTextBox = (RichTextBox)(modelsTableLayoutPanel.GetControlFromPosition(0, modelsTableLayoutPanel.RowCount - 1) as RichTextBox);
-                    _log_richTextBox.Text = "Model data summary:\nIterations: " + model_data[2].Count + " \nRemoved: " + model_data[2][model_data[2].Count - 1].Y.ToString() + "\nSusceptible: " + model_data[0][model_data[0].Count - 1].Y.ToString();
+                    _log_richTextBox.Text = "Model data summary:\nIterations: " + model_data[2].Count + " \nRemoved: " + model_data[2][model_data[2].Count - 1].Y.ToString() + "\nSusceptible: " + model_data[0][model_data[0].Count - 1].Y.ToString() + "\nR_0: " + (Convert.ToDouble(((TextBox)(modelsTableLayoutPanel.GetControlFromPosition(0, 8)) as TextBox).Text.Replace('.', ',')) / Convert.ToDouble(((TextBox)(modelsTableLayoutPanel.GetControlFromPosition(0, 10)) as TextBox).Text.Replace('.', ',')));
                 }
             }
         }
