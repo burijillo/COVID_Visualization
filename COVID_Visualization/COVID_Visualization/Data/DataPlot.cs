@@ -204,13 +204,8 @@ namespace COVID_Visualization.Data
             List<string> keyList = globalDataDeaths_dict[country].NATIONAL_DATA.DATA.Keys.ToList();
             for (int i = 1; i < globalDataDeaths_dict[country].NATIONAL_DATA.DATA.Count; i++)
             {
-                float postVal_confirmed = globalDataConfirmed_dict[country].NATIONAL_DATA.DATA[keyList[i]];
-                float preVal_confirmed = globalDataConfirmed_dict[country].NATIONAL_DATA.DATA[keyList[i - 1]];
-                float postVal_deaths = globalDataDeaths_dict[country].NATIONAL_DATA.DATA[keyList[i]];
-                float preVal_deaths = globalDataDeaths_dict[country].NATIONAL_DATA.DATA[keyList[i - 1]];
-
-                float value_deaths = postVal_deaths - preVal_deaths;
-                float value_confirmed = postVal_confirmed - preVal_confirmed;
+                float value_confirmed = globalDataConfirmed_dict[country].NATIONAL_DATA.DATA[keyList[i]];
+                float value_deaths = globalDataDeaths_dict[country].NATIONAL_DATA.DATA[keyList[i]];
 
                 float value = 0;
                 if (value_confirmed > 0)
